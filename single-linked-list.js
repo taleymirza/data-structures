@@ -16,7 +16,7 @@ var MyLinkedList = function() {
  * @return {number}
  */
 MyLinkedList.prototype.get = function(index) {
-    if(this.count===0) return -1
+    if(this.count===0 || index>=this.count) return -1
     
     var current = this.head, counter = 0
     while(counter!==index){
@@ -32,7 +32,7 @@ MyLinkedList.prototype.get = function(index) {
  * @return {void}
  */
 MyLinkedList.prototype.addAtHead = function(val) {
-    var node = new Node(val)
+    var node = new Node(val,this.head)
     this.head = node
     this.count++
     
@@ -44,7 +44,7 @@ MyLinkedList.prototype.addAtHead = function(val) {
  */
 MyLinkedList.prototype.addAtTail = function(val) {
     
-    if(this.count===0) MyLinkedList.addAtHead(val)
+    if(this.count===0) this.addAtHead(val)
     else{
         var current = this.head
         var node = new Node(val)
@@ -64,6 +64,7 @@ MyLinkedList.prototype.addAtTail = function(val) {
  * @return {void}
  */
 MyLinkedList.prototype.addAtIndex = function(index, val) {
+    if(index>this.count) return
     if(index===0) this.addAtHead(val)
     else if (index===this.count) this.addAtTail(val)
     else{
@@ -85,7 +86,16 @@ MyLinkedList.prototype.addAtIndex = function(index, val) {
  * @return {void}
  */
 MyLinkedList.prototype.deleteAtIndex = function(index) {
-    if(index>=0 && index<this.count){
+    if(index===0){
+        if(this.count==1) this.head = null
+        else{
+            var first = this.head
+            this.head = first.next
+        }
+        this.count--
+    }
+
+    else if(index>0 && index<this.count){
         var counter = 0, previous = this.head
         while(counter!==index-1){
             previous = previous.next
@@ -97,7 +107,6 @@ MyLinkedList.prototype.deleteAtIndex = function(index) {
     }
     
 };
-
 /** 
  * Your MyLinkedList object will be instantiated and called as such:
  * var obj = new MyLinkedList()
